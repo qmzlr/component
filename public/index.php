@@ -5,6 +5,7 @@ use Delight\Auth\Auth;
 use DI\Container;
 use DI\ContainerBuilder;
 use League\Plates\Engine;
+use Tamtamchik\SimpleFlash\Flash;
 
 if (!session_id()) {
     session_start();
@@ -12,16 +13,15 @@ if (!session_id()) {
 
 require '../vendor/autoload.php';
 
-
 $builder = new ContainerBuilder();
 $builder->addDefinitions([
     Engine::class => function () {
-        return new Engine('../app/views');
+        return new Engine('../app/Views');
     },
     PDO::class => function () {
         $driver = 'mysql';
         $host = 'localhost';
-        $database = 'vmind';
+        $database = 'component';
         $username = 'root';
         $password = '';
         return new PDO("$driver:host=$host;dbname=$database", $username, $password);
@@ -46,6 +46,9 @@ try {
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/', ['App\Controllers\IndexController', 'index']);
     $r->addRoute('GET', '/login', 'App\Controllers\IndexController::login');
+    $r->addRoute('POST', '/registration', 'App\Controllers\IndexController::registration');
+    $r->addRoute('POST', '/authorization', 'App\Controllers\IndexController::authorization');
+    $r->addRoute('GET', '/users', 'App\Controllers\IndexController::users');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

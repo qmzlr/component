@@ -16,7 +16,7 @@ class QueryBuilder
         $this->queryFactory = $queryFactory;
     }
 
-    public function getAll($table): array | false
+    public function getAll($table): array|false
     {
         $select = $this->queryFactory->newSelect();
         $select->cols(['*'])
@@ -52,5 +52,16 @@ class QueryBuilder
             ->where('id = :id', ['id' => $where]);
         $sth = $this->pdo->prepare($delete->getStatement());
         $sth->execute($delete->getBindValues());
+    }
+
+    public function getOne(string $table, int $id)
+    {
+        $select = $this->queryFactory->newSelect();
+        $select->cols(['*'])
+            ->from($table)
+            ->where('id = :id', ['id' => $id]);
+        $sth = $this->pdo->prepare($select->getStatement());
+        $sth->execute($select->getBindValues());
+        return $sth->fetch(PDO::FETCH_ASSOC);
     }
 }

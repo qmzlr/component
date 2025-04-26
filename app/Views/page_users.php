@@ -41,7 +41,8 @@ $this->push('scripts') ?>
 
 
 <main id="js-page-content" role="main" class="page-content mt-3">
-    <?= $this->e($flash); ?>
+
+    <?= $flash ?>
     <div class="subheader">
         <h1 class="subheader-title">
             <i class='subheader-icon fal fa-users'></i> Список пользователей
@@ -87,11 +88,12 @@ $this->push('scripts') ?>
                                           style="background-image:url('<?= ($user['avatar'] ?? '') ?>'); background-size: cover;"></span>
                                 </span>
                             <div class="info-card-text flex-1">
+                                <?= ($user['username'] ?? '') ?>
                                 <?php
                                 if ($auth->hasRole('admin') || $auth->id() == $user['id']) : ?>
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info"
                                        data-toggle="dropdown" aria-expanded="false">
-                                        <?= ($user['name'] ?? '') ?>
+
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
                                     </a>

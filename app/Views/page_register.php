@@ -63,9 +63,7 @@ $this->push('scripts') ?>
                         </div>
                         <div class="col-xl-6 ml-auto mr-auto">
                             <div class="card p-4 rounded-plus bg-faded">
-                                <?php if ($this->e($flash) !== null && $this->e($flash) !== ''): ?>
-                                    <?php echo $flash; ?>
-                                <?php endif; ?>
+                                <?= $flash ?>
                                 <form id="js-login" novalidate="" action="/registration" method="post">
                                     <div class="form-group">
                                         <label class="form-label" for="emailverify">Email</label>

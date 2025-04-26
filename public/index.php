@@ -50,7 +50,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('POST', '/authorization', 'App\Controllers\IndexController::authorization');
     $r->addRoute('GET', '/users', 'App\Controllers\IndexController::users');
     $r->addRoute('GET', '/logout', 'App\Controllers\IndexController::logout');
-    $r->addRoute('GET', '/user/{id:\d+}', 'App\Controllers\IndexController::user');
+    $r->addRoute('GET', '/edit/{id:\d+}', 'App\Controllers\UserController::index');
+    $r->addRoute('POST', '/edit', 'App\Controllers\UserController::update');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

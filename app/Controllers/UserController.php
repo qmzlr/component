@@ -20,16 +20,25 @@ class UserController
         $this->auth = $auth;
     }
 
-    public function index($id): void
+    public function index($vars): void
     {
         if (!$this->auth->isLoggedIn()) {
             header('Location: /login');
             exit();
         }
-        if (!$this->auth->hasRole('admin') && $this->auth->id() != $id) {
+        if (!$this->auth->hasRole('admin') && $this->auth->id() != $vars['id']) {
             Flash::error('Можно редактировать только свой аккаунт');
+            header('Location: /users');
+            exit();
         }
+        $user = $this->qb->getOne('users', $vars['id']);
+        echo $this->templates->render('page_edit', ['user' => $user]);
+    }
 
-        echo $this->templates->render('page_users', ['flash' => Flash::display()]);
+    public function update($data): void
+    {
+        $this->qb->update('users', $data, $this->auth->id());
+        header('Location: /users');
+        exit();
     }
 }

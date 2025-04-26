@@ -29,7 +29,7 @@ $this->end();
             </a>
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
-            <?= $this->e($flash); ?>
+            <?= $flash; ?>
             <form action="/authorization" method="post">
                 <div class="form-group">
                     <label class="form-label" for="username">Email</label>

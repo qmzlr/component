@@ -1,7 +1,10 @@
 <?php
 
 use Aura\SqlQuery\QueryFactory;
+use Delight\Auth\Auth;
+use DI\Container;
 use DI\ContainerBuilder;
+use League\Plates\Engine;
 
 if (!session_id()) {
     session_start();
@@ -12,7 +15,9 @@ require '../vendor/autoload.php';
 
 $builder = new ContainerBuilder();
 $builder->addDefinitions([
-
+    Engine::class => function () {
+        return new Engine('../app/views');
+    },
     PDO::class => function () {
         $driver = 'mysql';
         $host = 'localhost';
@@ -23,6 +28,9 @@ $builder->addDefinitions([
     },
     QueryFactory::class => function () {
         return new QueryFactory('mysql');
+    },
+    Auth::class => function (Container $c) {
+        return new Auth($c->get(PDO::class));
     }
 
 ]);
@@ -36,7 +44,8 @@ try {
 }
 
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-
+    $r->addRoute('GET', '/', ['App\Controllers\IndexController', 'index']);
+    $r->addRoute('GET', '/login', 'App\Controllers\IndexController::login');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

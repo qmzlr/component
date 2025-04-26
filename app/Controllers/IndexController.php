@@ -24,17 +24,20 @@ class IndexController
 
     #[NoReturn] public function index(): void
     {
-        echo 'index';
         if (!$this->auth->isLoggedIn()) {
             echo $this->templates->render('page_register', ['flash' => Flash::display()]);
         } else {
-            echo $this->templates->render('page_users', ['flash' => Flash::display()]);
+            header('Location: /users');
+            exit();
         }
-        exit;
     }
 
     public function login(): void
     {
+        if ($this->auth->isLoggedIn()) {
+            header('Location: /');
+            exit();
+        }
         echo $this->templates->render('page_login', ['flash' => Flash::display()]);
     }
 
@@ -42,7 +45,7 @@ class IndexController
     {
         try {
             $this->auth->login($data['email'], $data['password']);
-            header('Location: /users');
+            header('Location: /');
             exit();
         } catch (\Delight\Auth\InvalidEmailException $e) {
             Flash::error('Wrong email address');
@@ -77,7 +80,27 @@ class IndexController
         }
         header('Location: /');
         exit();
-
-
     }
+
+    #[NoReturn] public function logout(): void
+    {
+        $this->auth->logOut();
+        header('Location: /');
+        exit();
+    }
+
+    public function users(): void
+    {
+        if ($this->auth->isLoggedIn()) {
+            $users = $this->qb->getAll('users');
+            echo $this->templates->render('page_users',
+                ['flash' => Flash::display(),
+                    'users' => $users,
+                    'auth' => $this->auth]);
+        } else {
+            header('Location: /login');
+            exit();
+        }
+    }
+
 }

@@ -18,6 +18,7 @@
 
 </head>
 <body>
+<?= $this->insert('header'); ?>
 <?= $this->section('content'); ?>
 </body>
 <?= $this->section('scripts'); ?>

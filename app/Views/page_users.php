@@ -1,4 +1,6 @@
 <?php
+
+
 $this->layout('layoutHead', ['title' => 'Users']);
 $this->push('styles') ?>
 <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="../../resource/css/vendors.bundle.css">
@@ -51,9 +53,10 @@ $this->push('scripts') ?>
 
     <div class="row">
         <div class="col-xl-12">
+
             <?php
-            if ($auth->hasRole('admin')) { ?>
-                <a class="btn btn-success" href="create_user.html">Добавить</a>
+            if ($auth->hasRole(\Delight\Auth\Role::ADMIN)) { ?>
+                <a class="btn btn-success" href="/create">Добавить</a>
             <?php } ?>
 
             <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
@@ -90,7 +93,7 @@ $this->push('scripts') ?>
                             <div class="info-card-text flex-1">
                                 <?= ($user['username'] ?? '') ?>
                                 <?php
-                                if ($auth->hasRole('admin') || $auth->id() == $user['id']) : ?>
+                                if ($auth->hasRole(\Delight\Auth\Role::ADMIN) || $auth->id() == $user['id']) : ?>
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info"
                                        data-toggle="dropdown" aria-expanded="false">
 

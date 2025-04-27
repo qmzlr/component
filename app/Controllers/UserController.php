@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\QueryBuilder;
 use Delight\Auth\Auth;
+use Delight\Auth\Role;
+use JetBrains\PhpStorm\NoReturn;
 use League\Plates\Engine;
 use Tamtamchik\SimpleFlash\Flash;
 
@@ -26,7 +28,7 @@ class UserController
             header('Location: /login');
             exit();
         }
-        if (!$this->auth->hasRole('admin') && $this->auth->id() != $vars['id']) {
+        if (!$this->auth->hasRole(Role::ADMIN) && $this->auth->id() != $vars['id']) {
             Flash::error('Можно редактировать только свой аккаунт');
             header('Location: /users');
             exit();
@@ -35,10 +37,36 @@ class UserController
         echo $this->templates->render('page_edit', ['user' => $user]);
     }
 
-    public function update($data): void
+    #[NoReturn] public function update($data): void
     {
         $this->qb->update('users', $data, $this->auth->id());
         header('Location: /users');
         exit();
+    }
+
+    public function newUser(): void
+    {
+        if (!$this->auth->hasRole(Role::ADMIN)) {
+            header('Location: /users');
+            exit();
+        }
+        echo $this->templates->render('page_create_user');
+    }
+
+    #[NoReturn] public function createUser($data): void
+    {
+        try {
+            $this->auth->admin()->createUser($_POST['email'], $_POST['password'], $_POST['username'] ?? null);
+
+            Flash::success('User created');
+            header('Location: /users');
+            exit();
+        } catch (\Delight\Auth\InvalidEmailException $e) {
+            die('Invalid email address');
+        } catch (\Delight\Auth\InvalidPasswordException $e) {
+            die('Invalid password');
+        } catch (\Delight\Auth\UserAlreadyExistsException $e) {
+            die('User already exists');
+        }
     }
 }

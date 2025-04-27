@@ -45,25 +45,25 @@ $this->push('scripts') ?>
                             <!-- username -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Имя</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" id="simpleinput" name="username" class="form-control">
                             </div>
 
                             <!-- title -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Место работы</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" id="simpleinput" name="job" class="form-control">
                             </div>
 
                             <!-- tel -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Номер телефона</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="tel" id="simpleinput" name="tel" class="form-control">
                             </div>
 
                             <!-- address -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Адрес</label>
-                                <input type="text" id="simpleinput" class="form-control">
+                                <input type="text" id="simpleinput" name="address" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@ $this->push('scripts') ?>
                             <!-- email -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Email</label>
-                                <input type="text" id="simpleinput" name="email" class="form-control" required>
+                                <input type="email" id="simpleinput" name="email" class="form-control" required>
                             </div>
 
                             <!-- password -->
@@ -93,16 +93,16 @@ $this->push('scripts') ?>
                             <!-- status -->
                             <div class="form-group">
                                 <label class="form-label" for="example-select">Выберите статус</label>
-                                <select class="form-control" id="example-select">
-                                    <option>Онлайн</option>
-                                    <option>Отошел</option>
-                                    <option>Не беспокоить</option>
+                                <select class="form-control" name="state" id="example-select">
+                                    <option value="Онлайн">Онлайн</option>
+                                    <option value="Отошел">Отошел</option>
+                                    <option value="Не беспокоить">Не беспокоить</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                <input type="file" id="example-fileinput" class="form-control-file">
+                                <input type="file" id="example-fileinput" name="avatar " class="form-control-file">
                             </div>
                         </div>
                     </div>
@@ -124,8 +124,7 @@ $this->push('scripts') ?>
                                         <div class="input-group-prepend">
                                                 <span class="input-group-text bg-transparent border-right-0 py-1 px-3">
                                                     <span class="icon-stack fs-xxl">
-                                                        <i class="base-7 icon-stack-3x" style="color:#4680C2"></i>
-                                                        <i class="fab fa-vk icon-stack-1x text-white"></i>
+                                                        <i class="fab fa-vk"></i>
                                                     </span>
                                                 </span>
                                         </div>
@@ -138,8 +137,7 @@ $this->push('scripts') ?>
                                         <div class="input-group-prepend">
                                                 <span class="input-group-text bg-transparent border-right-0 py-1 px-3">
                                                     <span class="icon-stack fs-xxl">
-                                                        <i class="base-7 icon-stack-3x" style="color:#38A1F3"></i>
-                                                        <i class="fab fa-telegram icon-stack-1x text-white"></i>
+                                                        <i class="fab fa-telegram"></i>
                                                     </span>
                                                 </span>
                                         </div>
@@ -152,8 +150,7 @@ $this->push('scripts') ?>
                                         <div class="input-group-prepend">
                                                 <span class="input-group-text bg-transparent border-right-0 py-1 px-3">
                                                     <span class="icon-stack fs-xxl">
-                                                        <i class="base-7 icon-stack-3x" style="color:#E1306C"></i>
-                                                        <i class="fab fa-instagram icon-stack-1x text-white"></i>
+                                                        <i class="fab fa-instagram"></i>
                                                     </span>
                                                 </span>
                                         </div>

@@ -56,12 +56,13 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <!-- status -->
+                                    <input type="hidden" name="id" value="<?= $user['id'] ?>">
                                     <div class="form-group">
                                         <label class="form-label" for="example-select">Выберите статус</label>
-                                        <select class="form-control" id="example-select">
-                                            <option>Онлайн</option>
-                                            <option>Отошел</option>
-                                            <option>Не беспокоить</option>
+                                        <select class="form-control" name="state" id="example-select">
+                                            <option value="Онлайн">Онлайн</option>
+                                            <option value="Отошел">Отошел</option>
+                                            <option value="Не беспокоить">Не беспокоить</option>
                                         </select>
                                     </div>
                                 </div>

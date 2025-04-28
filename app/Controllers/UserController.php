@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Helper;
+
 use App\QueryBuilder;
 use Delight\Auth\Auth;
 use Delight\Auth\AuthError;
@@ -29,15 +29,7 @@ class UserController
 
     public function index($vars): void
     {
-        if (!$this->auth->isLoggedIn()) {
-            header('Location: /login');
-            exit();
-        }
-        if (!$this->auth->hasRole(Role::ADMIN) && $this->auth->id() != $vars['id']) {
-            Flash::error('Можно редактировать только свой аккаунт');
-            header('Location: /users');
-            exit();
-        }
+        $this->helper($this->auth->id());
         $user = $this->qb->getOne('users', $vars['id']);
         echo $this->templates->render('page_edit', ['user' => $user]);
     }
@@ -90,15 +82,13 @@ class UserController
         echo $this->templates->render('page_security', ['user' => $user]);
     }
 
-    public function securityUpdateAdmin()
-    {
-
-    }
 
     public function securityUpdate($data): void
     {
-        if ($this->auth->id() == $data['id']) {
-            if (!empty($data['email']) && $data['email'] != $this->auth->getEmail()) {
+        $user = $this->qb->getOne('users', $data['id']);
+
+        if (!empty($data['email']) && $data['email'] != $user['email']) {
+            if ($this->auth->id() == $data['id']) {
                 try {
                     $this->auth->changeEmail($data['email'], function ($selector, $token) {
                         $this->auth->confirmEmail($selector, $token);
@@ -118,10 +108,13 @@ class UserController
                 } catch (\Delight\Auth\TooManyRequestsException $e) {
                     Flash::error('Too many requests');
                 }
+            } else {
+                Flash::error('Почту может менять только владелец аккаунта');
             }
-        } else {
-            Flash::error('Почту может менять только владелец аккаунта');
+
         }
+
+
         if ((!empty($data['password']) && ($data['password'] == $data['passwordConfirm']))) {
             try {
                 if ($this->auth->hasRole(Role::ADMIN) && $this->auth->id() != $data['id']) {
@@ -144,6 +137,20 @@ class UserController
                 Flash::error('Invalid password(s)');
             }
         }
+        header('Location: /users');
+        exit();
+    }
+
+    public function status($vars): void
+    {
+        $this->helper($this->auth->id());
+        $user = $this->qb->getOne('users', $vars['id']);
+        echo $this->templates->render('page_state', ['user' => $user]);
+    }
+
+    #[NoReturn] public function statusUpdate($data): void
+    {
+        $this->qb->update('users', $data, $data['id']);
         header('Location: /users');
         exit();
     }

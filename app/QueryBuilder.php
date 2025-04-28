@@ -32,6 +32,7 @@ class QueryBuilder
             ->into($table)
             ->cols($data);
         $sth = $this->pdo->prepare($insert->getStatement());
+        -d($insert->getBindValues());
         $sth->execute($insert->getBindValues());
     }
 

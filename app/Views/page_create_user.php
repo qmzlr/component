@@ -57,7 +57,7 @@ $this->push('scripts') ?>
                             <!-- tel -->
                             <div class="form-group">
                                 <label class="form-label" for="simpleinput">Номер телефона</label>
-                                <input type="tel" id="simpleinput" name="tel" class="form-control">
+                                <input type="tel" id="simpleinput" name="phone" class="form-control">
                             </div>
 
                             <!-- address -->
@@ -102,7 +102,7 @@ $this->push('scripts') ?>
 
                             <div class="form-group">
                                 <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                <input type="file" id="example-fileinput" name="avatar " class="form-control-file">
+                                <input type="file" id="example-fileinput" name="avatar" class="form-control-file">
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,8 @@ $this->push('scripts') ?>
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0"
+                                               name="vk">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -141,7 +142,8 @@ $this->push('scripts') ?>
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0"
+                                               name="tg">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -154,7 +156,8 @@ $this->push('scripts') ?>
                                                     </span>
                                                 </span>
                                         </div>
-                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                        <input type="text" class="form-control border-left-0 bg-transparent pl-0"
+                                               name="inst">
                                     </div>
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">

@@ -76,7 +76,7 @@ $this->push('scripts') ?>
     </div>
     <div class="row" id="js-contacts">
 
-        <?php d($users);
+        <?php
         foreach ($users as $user):
             ?>
 

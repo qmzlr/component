@@ -56,17 +56,18 @@ class UserController
     #[NoReturn] public function createUser($data): void
     {
         try {
-            $this->auth->admin()->createUser($_POST['email'], $_POST['password'], $_POST['username'] ?? null);
-
+            $newUserId = $this->auth->admin()->createUser($data['email'], $data['password'], $data['username']);
+            unset($data['email'], $data['password'], $data['username']);
+            $this->qb->update('users', $data, $newUserId);
             Flash::success('User created');
             header('Location: /users');
             exit();
         } catch (\Delight\Auth\InvalidEmailException $e) {
-            die('Invalid email address');
+            Flash::error('Invalid email address');
         } catch (\Delight\Auth\InvalidPasswordException $e) {
-            die('Invalid password');
+            Flash::error('Invalid password');
         } catch (\Delight\Auth\UserAlreadyExistsException $e) {
-            die('User already exists');
+            Flash::error('User already exists');
         }
     }
 }

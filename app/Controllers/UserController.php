@@ -2,9 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Helper;
 use App\QueryBuilder;
 use Delight\Auth\Auth;
+use Delight\Auth\AuthError;
+use Delight\Auth\InvalidPasswordException;
+use Delight\Auth\NotLoggedInException;
 use Delight\Auth\Role;
+use Delight\Auth\UnknownIdException;
 use JetBrains\PhpStorm\NoReturn;
 use League\Plates\Engine;
 use Tamtamchik\SimpleFlash\Flash;
@@ -46,15 +51,14 @@ class UserController
 
     public function newUser(): void
     {
-        if (!$this->auth->hasRole(Role::ADMIN)) {
-            header('Location: /users');
-            exit();
-        }
+
+        $this->helper($this->auth->id());
         echo $this->templates->render('page_create_user');
     }
 
     #[NoReturn] public function createUser($data): void
     {
+
         try {
             $newUserId = $this->auth->admin()->createUser($data['email'], $data['password'], $data['username']);
             unset($data['email'], $data['password'], $data['username']);
@@ -64,10 +68,95 @@ class UserController
             exit();
         } catch (\Delight\Auth\InvalidEmailException $e) {
             Flash::error('Invalid email address');
-        } catch (\Delight\Auth\InvalidPasswordException $e) {
+        } catch (InvalidPasswordException $e) {
             Flash::error('Invalid password');
         } catch (\Delight\Auth\UserAlreadyExistsException $e) {
             Flash::error('User already exists');
         }
+        header('Location: /users');
+        exit();
     }
+
+    public function profile($vars): void
+    {
+        $user = $this->qb->getOne('users', $vars['id']);
+        echo $this->templates->render('page_profile', ['user' => $user]);
+    }
+
+    public function security($vars): void
+    {
+        $this->helper($vars['id']);
+        $user = $this->qb->getOne('users', $vars['id']);
+        echo $this->templates->render('page_security', ['user' => $user]);
+    }
+
+    public function securityUpdateAdmin()
+    {
+
+    }
+
+    public function securityUpdate($data): void
+    {
+        if ($this->auth->id() == $data['id']) {
+            if (!empty($data['email']) && $data['email'] != $this->auth->getEmail()) {
+                try {
+                    $this->auth->changeEmail($data['email'], function ($selector, $token) {
+                        $this->auth->confirmEmail($selector, $token);
+                    });
+
+                    Flash::success('Email has been changed');
+                    header('Location: /users');
+                    exit();
+                } catch (\Delight\Auth\InvalidEmailException $e) {
+                    Flash::error('Invalid email address');
+                } catch (\Delight\Auth\UserAlreadyExistsException $e) {
+                    Flash::error('Email address already exists');
+                } catch (\Delight\Auth\EmailNotVerifiedException $e) {
+                    Flash::error('Account not verified');
+                } catch (NotLoggedInException $e) {
+                    Flash::error('Not logged in');
+                } catch (\Delight\Auth\TooManyRequestsException $e) {
+                    Flash::error('Too many requests');
+                }
+            }
+        } else {
+            Flash::error('Почту может менять только владелец аккаунта');
+        }
+        if ((!empty($data['password']) && ($data['password'] == $data['passwordConfirm']))) {
+            try {
+                if ($this->auth->hasRole(Role::ADMIN) && $this->auth->id() != $data['id']) {
+                    try {
+                        $this->auth->admin()->changePasswordForUserById($data['id'], $data['password']);
+                    } catch (UnknownIdException $e) {
+                        Flash::error('id not');
+                    } catch (InvalidPasswordException $e) {
+                        Flash::error('Invalid password(s)');
+                    }
+                } else {
+                    $this->auth->changePasswordWithoutOldPassword($data['password']);
+                    Flash::success('Password has been changed');
+                    header('Location: /users');
+                    exit();
+                }
+            } catch (NotLoggedInException $e) {
+                Flash::error('Not logged in');
+            } catch (InvalidPasswordException $e) {
+                Flash::error('Invalid password(s)');
+            }
+        }
+        header('Location: /users');
+        exit();
+    }
+
+    public function helper($id): void
+    {
+        if (!$this->auth->isLoggedIn() || (!$this->auth->hasRole(Role::ADMIN) && $this->auth->id() != $id)) {
+            $redirectUrl = $this->auth->isLoggedIn() ? '/users' : '/login';
+            $message = $this->auth->isLoggedIn() ? 'Можно редактировать только свой аккаунт' : null;
+            if ($message) Flash::error($message);
+            header("Location: $redirectUrl");
+            exit();
+        }
+    }
+
 }

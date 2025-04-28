@@ -91,7 +91,7 @@ $this->push('scripts') ?>
                                           style="background-image:url('<?= ($user['avatar'] ?? '') ?>'); background-size: cover;"></span>
                                 </span>
                             <div class="info-card-text flex-1">
-                                <?= ($user['username'] ?? '') ?>
+                                <a href="/profile/<?= ($user['id'] ?? '') ?>"><?= ($user['username'] ?? 'Нет имени') ?></a>
                                 <?php
                                 if ($auth->hasRole(\Delight\Auth\Role::ADMIN) || $auth->id() == $user['id']) : ?>
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info"

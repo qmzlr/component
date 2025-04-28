@@ -1,5 +1,6 @@
 <?php
 
+use App\Helper;
 use Aura\SqlQuery\QueryFactory;
 use Delight\Auth\Auth;
 use DI\Container;
@@ -31,6 +32,9 @@ $builder->addDefinitions([
     },
     Auth::class => function (Container $c) {
         return new Auth($c->get(PDO::class));
+    },
+    Helper::class => function (Container $c) {
+        return new Helper($c->get(Auth::class));
     }
 
 ]);
@@ -54,6 +58,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('POST', '/edit', 'App\Controllers\UserController::update');
     $r->addRoute('GET', '/create', 'App\Controllers\UserController::newUser');
     $r->addRoute('POST', '/createUser', 'App\Controllers\UserController::createUser');
+    $r->addRoute('GET', '/profile/{id:\d+}', 'App\Controllers\UserController::profile');
+    $r->addRoute('GET', '/security/{id:\d+}', 'App\Controllers\UserController::security');
+    $r->addRoute('POST', '/securityUpdate', 'App\Controllers\UserController::securityUpdate');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];

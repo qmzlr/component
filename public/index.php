@@ -60,6 +60,9 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
     $r->addRoute('POST', '/securityUpdate', 'App\Controllers\UserController::securityUpdate');
     $r->addRoute('GET', '/status/{id:\d+}', 'App\Controllers\UserController::status');
     $r->addRoute('POST', '/statusUpdate', 'App\Controllers\UserController::statusUpdate');
+    $r->addRoute('GET', '/media/{id:\d+}', 'App\Controllers\UserController::pageMedia');
+    $r->addRoute('POST', '/mediaUpdate', 'App\Controllers\UserController::mediaUpdate');
+    $r->addRoute('GET', '/delete/{id:\d+}', 'App\Controllers\UserController::delete');
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
